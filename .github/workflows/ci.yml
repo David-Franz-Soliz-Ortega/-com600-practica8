@@ -19,5 +19,13 @@ jobs:
       - name: Instalar dependencias 
         run: npm ci 
         
-      - name: Ejecutar la suite de la Práctica 7 
-        run: npm test
+      - name: Ejecutar la suite de pruebas con cobertura
+        run: npm run test:cov 
+        
+      - name: Publicar el reporte como artefacto 
+        if: always() 
+        uses: actions/upload-artifact@v4 
+        with: 
+          name: cobertura-${{ github.sha }} 
+          path: coverage/ 
+          retention-days: 7
