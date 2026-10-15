@@ -1,13 +1,22 @@
+
+name: CI 
+on: 
+  push: 
+  pull_request: 
+
 jobs: 
- pruebas: 
-  runs-on: ubuntu-latest 
-  steps: 
-  - uses: actions/checkout@v4 
-- name: Preparar Node.js 20 
-  uses: actions/setup-node@v4 
-  with: 
-    node-version: "20" 
-- name: Instalar dependencias 
-  run: npm ci 
-- name: Ejecutar la suite de la Práctica 7 
-  run: npm test
+  pruebas: 
+    runs-on: ubuntu-latest 
+    steps: 
+      - uses: actions/checkout@v4 
+      
+      - name: Preparar Node.js 24 
+        uses: actions/setup-node@v4 
+        with: 
+          node-version: "24" 
+          
+      - name: Instalar dependencias 
+        run: npm ci 
+        
+      - name: Ejecutar la suite de la Práctica 7 
+        run: npm test
