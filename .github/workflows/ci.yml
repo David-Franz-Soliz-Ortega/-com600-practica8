@@ -4,7 +4,7 @@ on:
   pull_request: 
 
 jobs: 
-  # --- PRIMER JOB: PRUEBAS ---dd
+  # --- PRIMER JOB: PRUEBAS ---
   pruebas: 
     runs-on: ubuntu-latest 
     steps: 
@@ -65,12 +65,19 @@ jobs:
           registry: ghcr.io 
           username: ${{ github.actor }} 
           password: ${{ secrets.GITHUB_TOKEN }} 
+
+      - name: Sanitizar nombre de imagen para Docker
+        run: |
+          # Docker requiere nombres de imagen en minúsculas y sin guión inicial en los componentes
+          REPO_CLEAN=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' | sed 's|/-|/|g')
+          echo "IMAGE_NAME=ghcr.io/$REPO_CLEAN" >> $GITHUB_ENV
           
       - name: Construir y publicar la imagen 
         uses: docker/build-push-action@v6 
         with: 
           context: . 
+          file: ./dockerfile
           push: true 
           tags: | 
-            ghcr.io/${{ github.repository }}:${{ github.sha }} 
-            ghcr.io/${{ github.repository }}:1.0.0
+            ${{ env.IMAGE_NAME }}:${{ github.sha }} 
+            ${{ env.IMAGE_NAME }}:1.0.0
