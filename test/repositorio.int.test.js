@@ -1,5 +1,5 @@
-const { CompressionStream, DecompressionStream } = require('node:stream/web');
-Object.assign(global, { CompressionStream, DecompressionStream });
+const { CompressionStream, DecompressionStream, TransformStream } = require('node:stream/web');
+Object.assign(global, { CompressionStream, DecompressionStream, TransformStream });
 
 const { MongoDBContainer } = require("@testcontainers/mongodb");
 const { crearRepositorio } = require("../src/repositorio");
