@@ -1,3 +1,8 @@
+const { TransformStream } = require('node:stream/web');
+globalThis.TransformStream = TransformStream;
+globalThis.CompressionStream = class CompressionStream {};
+globalThis.DecompressionStream = class DecompressionStream {};
+
 const { MongoDBContainer } = require("@testcontainers/mongodb");
 const { crearRepositorio } = require("../src/repositorio");
 describe("Pruebas de integración CRUD", () => {
