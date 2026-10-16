@@ -1,9 +1,11 @@
+const { MongoDBContainer } = require("@testcontainers/mongodb");
+const { crearRepositorio } = require("../src/repositorio");
+
 if (typeof globalThis.DecompressionStream === 'undefined') {
   globalThis.DecompressionStream = class DecompressionStream {};
   globalThis.CompressionStream = class CompressionStream {};
 }
-const { MongoDBContainer } = require("@testcontainers/mongodb");
-const { crearRepositorio } = require("../src/repositorio");
+
 
 describe("Pruebas de integración CRUD", () => {
   let contenedor, repo;
