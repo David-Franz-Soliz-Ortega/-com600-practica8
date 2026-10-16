@@ -1,13 +1,5 @@
-// 1. EL PARCHE DEFINITIVO PARA JEST Y UNDICI
-const { TransformStream } = require('node:stream/web');
-globalThis.TransformStream = TransformStream;
-globalThis.CompressionStream = class CompressionStream {};
-globalThis.DecompressionStream = class DecompressionStream {};
-
-// 2. LIBRERÍAS
 const { MongoDBContainer } = require("@testcontainers/mongodb");
 const { crearRepositorio } = require("../src/repositorio");
-
 describe("Pruebas de integración CRUD", () => {
   let contenedor, repo;
 
