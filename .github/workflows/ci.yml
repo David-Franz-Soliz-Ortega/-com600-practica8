@@ -1,23 +1,23 @@
-
 name: CI 
 on: 
   push: 
   pull_request: 
 
 jobs: 
+  # --- PRIMER JOB: PRUEBAS ---
   pruebas: 
     runs-on: ubuntu-latest 
     steps: 
       - uses: actions/checkout@v4 
       
-      - name: Preparar Node.js 24 
+      - name: Preparar Node.js
         uses: actions/setup-node@v4 
         with: 
           node-version: "24" 
-          cache: npm
+          cache: npm 
           
       - name: Instalar dependencias 
-        run: npm ci 
+        run: npm install 
         
       - name: Ejecutar la suite de pruebas con cobertura
         run: npm run test:cov 
@@ -29,3 +29,22 @@ jobs:
           name: cobertura-${{ github.sha }} 
           path: coverage/ 
           retention-days: 7
+
+  # --- SEGUNDO JOB: CALIDAD (EN PARALELO) ---
+  calidad: 
+    runs-on: ubuntu-latest 
+    steps: 
+      - uses: actions/checkout@v4 
+      
+      - uses: actions/setup-node@v4 
+        with: 
+          node-version: "20" 
+          cache: npm 
+          
+      - run: npm install 
+      
+      - name: Análisis estático 
+        run: npx eslint src test --max-warnings 0 
+        
+      - name: Escaneo de dependencias 
+        run: npm audit --audit-level=critical
