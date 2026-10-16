@@ -1,9 +1,10 @@
-if (typeof globalThis.DecompressionStream === 'undefined') {
-  globalThis.DecompressionStream = class DecompressionStream {};
-  globalThis.CompressionStream = class CompressionStream {};
-}
+// 1. EL PARCHE DEFINITIVO PARA JEST Y UNDICI
+const { TransformStream } = require('node:stream/web');
+globalThis.TransformStream = TransformStream;
+globalThis.CompressionStream = class CompressionStream {};
+globalThis.DecompressionStream = class DecompressionStream {};
 
-// 2. DESPUÉS LLAMAMOS A LAS LIBRERÍAS
+// 2. LIBRERÍAS
 const { MongoDBContainer } = require("@testcontainers/mongodb");
 const { crearRepositorio } = require("../src/repositorio");
 
