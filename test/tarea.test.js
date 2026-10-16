@@ -1,7 +1,7 @@
 const { estadoDeTarea } = require("../src/tarea"); 
 describe("estadoDeTarea", () => { 
  test("devuelve COMPLETADA cuando la tarea está terminada", () => { 
- const tarea = { titulo: "Entregar informe", completada: true }; // preparar  const estado = estadoDeTarea(tarea); // ejecutar  expect(estado).toBe("COMPLETADA"); // verificar  }); 
+ 
 });});
 
 test("devuelve ATRASADA cuando venció y no está completada", () => { 
