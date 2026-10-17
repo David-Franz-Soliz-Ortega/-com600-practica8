@@ -73,5 +73,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/david-franz-soliz-ortega/-com600-practica8:${{ github.sha }}
-            ghcr.io/david-franz-soliz-ortega/-com600-practica8:1.0.0
+            ghcr.io/david-franz-soliz-ortega/com600-practica8:${{ github.sha }}
+            ghcr.io/david-franz-soliz-ortega/com600-practica8:1.0.0
