@@ -7,7 +7,7 @@ describe("Pruebas de integración CRUD", () => {
  beforeAll(async () => {
     // Es CRÍTICO que diga "mongo:6.0" aquí adentro
     contenedor = await new MongoDBContainer("mongo:6.0").start();
-    const uri = contenedor.getConnectionString();
+    let uri = contenedor.getConnectionString();
     if (!uri.includes("directConnection=true")) {
       uri += uri.includes("?") ? "&directConnection=true" : "?directConnection=true";
     }
