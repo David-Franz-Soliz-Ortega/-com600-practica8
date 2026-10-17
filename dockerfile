@@ -12,7 +12,7 @@ COPY . .
 # 6. Documentar el puerto que expone la aplicación 
 EXPOSE 3000 
 # 7. Comando que se ejecuta al arrancar el contenedor 
-CMD ["node", "app.js"] 
+CMD ["node", "src/app.js"] 
 
 COPY package*.json ./
 
