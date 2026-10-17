@@ -7,4 +7,4 @@ test("el total no puede ser negativo cuando el descuento supera el 100%", () => 
   const total = calcularTotal(items, descuento);
   
   expect(total).toBe(0); 
-});
+}); 
