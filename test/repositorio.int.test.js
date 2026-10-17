@@ -14,7 +14,7 @@ describe("Pruebas de integración CRUD", () => {
   afterAll(async () => {
     if (repo) await repo.cerrar();
     if (contenedor) await contenedor.stop();
-  }, 60000);
+  }, 90000);
 
   // Aislamiento: Limpia la colección antes de CADA prueba
   beforeEach(async () => {
