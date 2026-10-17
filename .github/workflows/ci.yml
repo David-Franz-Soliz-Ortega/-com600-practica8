@@ -1,83 +1,77 @@
-name: CI 
-on: 
-  push: 
-  pull_request: 
+name: CI
 
-jobs: 
-  # --- PRIMER JOB: PRUEBAS ---
-  pruebas: 
-    runs-on: ubuntu-latest 
-    steps: 
-      - uses: actions/checkout@v4 
-      
-      - name: Preparar Node.js
-        uses: actions/setup-node@v4 
-        with: 
-          node-version: "20" 
-          cache: npm 
-          
-      - name: Instalar dependencias 
-        run: npm install 
-        
-      - name: Ejecutar la suite de pruebas con cobertura
-        run: npm run test:cov 
-        
-      - name: Publicar el reporte como artefacto 
-        if: always() 
-        uses: actions/upload-artifact@v4 
-        with: 
-          name: cobertura-${{ github.sha }} 
-          path: coverage/ 
-          retention-days: 7
+on:
+  push:
+  pull_request:
 
-  # --- SEGUNDO JOB: CALIDAD ---
-  calidad: 
-    runs-on: ubuntu-latest 
-    steps: 
-      - uses: actions/checkout@v4 
-      
-      - uses: actions/setup-node@v4 
-        with: 
-          node-version: "20" 
-          cache: npm 
-          
-      - run: npm install 
-      
-      - name: Análisis estático 
-        run: npx eslint src test --max-warnings 0 
-        
-      - name: Escaneo de dependencias 
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["22", "24"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preparar Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar la suite de la Práctica 7
+        run: npm test
+
+  calidad:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Preparar Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Análisis estático
+        run: npx eslint src tests --max-warnings 0
+
+      - name: Escaneo de dependencias
         run: npm audit --audit-level=critical
 
-  # --- TERCER JOB: CREAR IMAGEN DOCKER ---
-  imagen: 
-    needs: [pruebas, calidad] 
-    runs-on: ubuntu-latest 
-    permissions: 
-      contents: read 
-      packages: write 
-    steps: 
-      - uses: actions/checkout@v4 
-      
-      - name: Iniciar sesión en el registro 
-        uses: docker/login-action@v3 
-        with: 
-          registry: ghcr.io 
-          username: ${{ github.actor }} 
-          password: ${{ secrets.GITHUB_TOKEN }} 
+  imagen:
+    needs: [pruebas, calidad]
+    runs-on: ubuntu-latest
 
-      - name: Sanitizar nombre de imagen para Docker
-        run: |
-          # Docker requiere nombres de imagen en minúsculas y sin guión inicial en los componentes
-          REPO_CLEAN=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]' | sed 's|/-|/|g')
-          echo "IMAGE_NAME=ghcr.io/$REPO_CLEAN" >> $GITHUB_ENV
-          
-      - name: Construir y publicar la imagen 
-        uses: docker/build-push-action@v6 
-        with: 
-          context: . 
-          file: ./dockerfile
-          push: true 
-          tags: | 
-            ${{ env.IMAGE_NAME }}:${{ github.sha }} 
-            ${{ env.IMAGE_NAME }}:1.0.0
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Iniciar sesión en el registro
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Construir y publicar la imagen
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/${{ github.repository }}:1.0.0
