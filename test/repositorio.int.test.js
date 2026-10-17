@@ -8,6 +8,9 @@ describe("Pruebas de integración CRUD", () => {
     // Es CRÍTICO que diga "mongo:6.0" aquí adentro
     contenedor = await new MongoDBContainer("mongo:6.0").start();
     const uri = contenedor.getConnectionString();
+    if (!uri.includes("directConnection=true")) {
+      uri += uri.includes("?") ? "&directConnection=true" : "?directConnection=true";
+    }
     repo = await crearRepositorio(uri);
   }, 60000); // <--- LA COMA Y EL 60000 VAN DESPUÉS DE LA LLAVE, ANTES DEL PARÉNTESIS FINAL
 
