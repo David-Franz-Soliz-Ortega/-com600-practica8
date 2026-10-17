@@ -4,10 +4,12 @@ const { crearRepositorio } = require("../src/repositorio");
 describe("Pruebas de integración CRUD", () => {
   let contenedor, repo;
 
-  beforeAll(async () => {
+ beforeAll(async () => {
+    // Es CRÍTICO que diga "mongo:6.0" aquí adentro
     contenedor = await new MongoDBContainer("mongo:6.0").start();
-    repo = await crearRepositorio(contenedor.getConnectionString() + "?directConnection=true");
-  }, 120000);
+    const uri = contenedor.getConnectionString();
+    repo = await crearRepositorio(uri);
+  });
 
   afterAll(async () => {
     if (repo) await repo.cerrar();

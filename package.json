@@ -17,7 +17,7 @@
   "type": "commonjs",
   "dependencies": {
     "express": "^5.3.0",
-    "mongodb": "^7.7.0"
+    "mongodb": "^6.21.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
