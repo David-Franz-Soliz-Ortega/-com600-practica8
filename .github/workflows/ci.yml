@@ -1,31 +1,75 @@
+name: CI
 
-name: CI 
-on: 
-  push: 
-  pull_request: 
+on:
+  push:
+  pull_request:
 
-jobs: 
-  pruebas: 
-    runs-on: ubuntu-latest 
-    steps: 
-      - uses: actions/checkout@v4 
-      
-      - name: Preparar Node.js 24 
-        uses: actions/setup-node@v4 
-        with: 
-          node-version: "24" 
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["20", "22"]
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
           cache: npm
-          
-      - name: Instalar dependencias 
-        run: npm ci 
-        
-      - name: Ejecutar la suite de pruebas con cobertura
-        run: npm run test:cov 
-        
-      - name: Publicar el reporte como artefacto 
-        if: always() 
-        uses: actions/upload-artifact@v4 
-        with: 
-          name: cobertura-${{ github.sha }} 
-          path: coverage/ 
-          retention-days: 7
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar la suite de pruebas
+        run: npm test
+
+  calidad:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Análisis estático
+        run: npx eslint src test --max-warnings 0
+
+      - name: Escaneo de dependencias
+        run: npm audit --audit-level=critical
+
+  imagen:
+    needs: [pruebas, calidad]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Iniciar sesión en el registro (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Construir y publicar la imagen
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/david-franz-soliz-ortega/com600-practica8:${{ github.sha }}
+            ghcr.io/david-franz-soliz-ortega/com600-practica8:1.0.0
