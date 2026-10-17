@@ -9,12 +9,14 @@ describe("Pruebas de integración CRUD", () => {
     contenedor = await new MongoDBContainer("mongo:6.0").start();
     const uri = contenedor.getConnectionString();
     repo = await crearRepositorio(uri);
-  });
+  }, 60000); // <--- LA COMA Y EL 60000 VAN DESPUÉS DE LA LLAVE, ANTES DEL PARÉNTESIS FINAL
 
   afterAll(async () => {
-    if (repo) await repo.cerrar();
-    if (contenedor) await contenedor.stop();
-  }, 90000);
+    // Esto soluciona el error de "Jest did not exit" apagando el contenedor correctamente
+    if (contenedor) {
+      await contenedor.stop();
+    }
+  }, 60000);
 
   // Aislamiento: Limpia la colección antes de CADA prueba
   beforeEach(async () => {
