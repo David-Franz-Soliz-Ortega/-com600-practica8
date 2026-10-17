@@ -5,7 +5,7 @@ describe("Pruebas de integración CRUD", () => {
   let contenedor, repo;
 
   beforeAll(async () => {
-    contenedor = await new MongoDBContainer("mongo:6").start();
+    contenedor = await new MongoDBContainer("mongo:6.0").start();
     repo = await crearRepositorio(contenedor.getConnectionString() + "?directConnection=true");
   }, 120000);
 
