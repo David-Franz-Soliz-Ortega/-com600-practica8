@@ -25,4 +25,4 @@ describe("estadoDeTarea", () => {
     expect(() => estadoDeTarea({})).toThrow("La tarea necesita un título"); 
   });
 
-});
+}); 
