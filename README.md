@@ -12,7 +12,7 @@ El pipeline se ejecuta automáticamente ante eventos de `push` y `pull_request` 
 
 ### 1. `pruebas` (Matriz de versiones)
 - **Ejecución**: Paralela en runners `ubuntu-latest`.
-- **Estrategia**: Matriz de versiones de Node.js (`20` y `22`) con `fail-fast: false`.
+- **Estrategia**: Matriz de versiones de Node.js (`22` y `24`) con `fail-fast: false`.
 - **Pasos**:
   1. Clona el repositorio con `actions/checkout@v4`.
   2. Configura Node.js con caché de dependencias `npm` (`actions/setup-node@v4`).

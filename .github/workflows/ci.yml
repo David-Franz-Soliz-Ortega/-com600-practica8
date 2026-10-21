@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ["20", "22"]
+        node: ["22", "24"]
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
@@ -44,10 +44,10 @@ jobs:
       - name: Checkout del código
         uses: actions/checkout@v4
 
-      - name: Preparar Node.js 20
+      - name: Preparar Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
 
       - name: Instalar dependencias
