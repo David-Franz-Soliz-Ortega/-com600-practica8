@@ -83,6 +83,6 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
-            ghcr.io/${{ github.repository }}:1.0.0
-            ${{ github.ref == 'refs/heads/main' && format('ghcr.io/{0}:latest', github.repository) || '' }}
+            ghcr.io/david-franz-soliz-ortega/com600-practica8:1.0.0
+            ghcr.io/david-franz-soliz-ortega/com600-practica8:${{ github.sha }}
+            ${{ github.ref == 'refs/heads/main' && 'ghcr.io/david-franz-soliz-ortega/com600-practica8:latest' || '' }}
