@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ["22", "24"]
+        node: ["20", "22"]
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
@@ -27,16 +27,27 @@ jobs:
       - name: Ejecutar la suite de pruebas
         run: npm test
 
+      - name: Generar el reporte de cobertura
+        run: npm run test:cov
+
+      - name: Publicar el reporte como artefacto
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cobertura-${{ matrix.node }}-${{ github.sha }}
+          path: coverage/
+          retention-days: 7
+
   calidad:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
 
-      - name: Preparar Node.js 24
+      - name: Preparar Node.js 20
         uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version: "20"
           cache: npm
 
       - name: Instalar dependencias
@@ -69,7 +80,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/david-franz-soliz-ortega/com600-practica8:${{ github.sha }}
-            ghcr.io/david-franz-soliz-ortega/com600-practica8:1.0.0
+            ghcr.io/${{ github.repository }}:${{ github.sha }}
+            ghcr.io/${{ github.repository }}:1.0.0
+            ${{ github.ref == 'refs/heads/main' && format('ghcr.io/{0}:latest', github.repository) || '' }}

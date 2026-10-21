@@ -11,4 +11,12 @@ app.post("/tareas", (req, res) => {
 app.get("/tareas", (_req, res) => res.json( 
  tareas.map(t => ({ ...t, estado: estadoDeTarea(t) })) 
 )); 
+
+if (require.main === module) {
+  const PORT = process.env.PORT || 3000;
+
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Servidor escuchando en el puerto ${PORT}`);
+  });
+}
 module.exports = app;

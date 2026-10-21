@@ -5,10 +5,7 @@ describe("estadoDeTarea", () => {
   test("devuelve COMPLETADA cuando la tarea está terminada", () => { 
     const tarea = { titulo: "Entregar informe", completada: true }; 
     const estado = estadoDeTarea(tarea); 
-    
-    // 👇 AQUÍ ESTÁ EL ERROR INTENCIONAL
-    // Usamos la variable para que ESLint no se queje, pero hacemos que falle la prueba
-    expect(estado).toBe("FALLO_INTENCIONAL"); 
+    expect(estado).toBe("COMPLETADA"); 
   }); 
 
   test("devuelve ATRASADA cuando venció y no está completada", () => { 
@@ -25,4 +22,4 @@ describe("estadoDeTarea", () => {
     expect(() => estadoDeTarea({})).toThrow("La tarea necesita un título"); 
   });
 
-}); 
+});
