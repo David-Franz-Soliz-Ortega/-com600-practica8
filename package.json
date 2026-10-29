@@ -13,8 +13,17 @@
   "keywords": [],
   "type": "commonjs",
   "dependencies": {
+    "@opentelemetry/api": "^1.10.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.82.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.300.0",
+    "@opentelemetry/resources": "^3.0.0",
+    "@opentelemetry/sdk-node": "^0.300.0",
     "express": "^5.2.1",
-    "mongodb": "^5.9.2"
+    "lodash": "^4.17.11",
+    "mongodb": "^5.9.2",
+    "pino": "^10.4.0",
+    "pino-http": "^11.0.0",
+    "prom-client": "^15.1.3"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
