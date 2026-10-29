@@ -26,6 +26,8 @@ jobs:
 
       - name: Ejecutar la suite de pruebas
         run: npm test
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
       - name: Generar el reporte de cobertura
         run: npm run test:cov
