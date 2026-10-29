@@ -25,7 +25,9 @@ jobs:
         run: npm ci
 
       - name: Ejecutar la suite de pruebas
-        run: npm test
+        run: |
+          echo "La variable JWT_SECRET esta enmascarada como: $JWT_SECRET"
+          npm test
         env:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
